@@ -8,3 +8,10 @@ predict btc PK via Pub Address<br>
 
 1 в папке generate генератор адресов BTC <br>
 (in the generate folder BTC address generator )<br>
+
+
+2 в папке model1 алгоритм для подбора версии 1 адресов BTC <br>
+(in the model1 folder an algorithm for selecting version 1 of BTC addresses )<br>
+
+<hr>
+@ddnitecry
