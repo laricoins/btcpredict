@@ -7,18 +7,18 @@ predict btc PK via Pub Address
 (the project is dedicated to research on predicting the private key of BTC knowing the public key )
 
 
-2 в папке generate генератор адресов BTC
-требования
-pip  bitcoinaddress 
-запуск в https://colab.research.google.com/
-2.1 подключить гоогл диск
-2.2 загрузить нужный пакет !pip install bitcoinaddress
-2.3 перейди в папку %cd drive/MyDrive/btcpredict/generate
-2.4 запустить генератор и ждать. попробуй начать с 1000 увеличивай до 10 000 ( примерное время генерации 1 000 000 адресов около 10 часов 
-      !python linegenegator.py --f train.txt --c  10
+2 в папке generate генератор адресов BTC <br>
+требования<br>
+pip  bitcoinaddress <br>
+запуск в https://colab.research.google.com/<br>
+2.1 подключить гоогл диск<br>
+2.2 загрузить нужный пакет !pip install bitcoinaddress<br>
+2.3 перейди в папку %cd drive/MyDrive/btcpredict/generate<br>
+2.4 запустить генератор и ждать. попробуй начать с 1000 увеличивай до 10 000 ( примерное время генерации 1 000 000 адресов около 10 часов <br>
+      !python linegenegator.py --f train.txt --c  10<br>
 
-результат
-в папке  generate    будет создан файл train.txt с примерно таким содержимым
+результат<br>
+в папке  generate    будет создан файл train.txt с примерно таким содержимым<br>
 
 1HuC8JmaoatJzYtTztHqerC5hWupyDg8EL;5JVq5zSCpm9pjLsrqDFfsuXkeso5fN1P94nKAS48omz3hvueASG
 16C7VFkVT3nBCriKbcZ1WmGQSDPG8St1vR;5KMtC3XmrRBtLqwsNVbxC9prcGUjBu1AgsHjAVAs3S4FLh2j1uu
