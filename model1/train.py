@@ -9,6 +9,7 @@ import requests
 from bitcoinaddress import Wallet
 import tensorflow as tf
 from matplotlib import pyplot
+from keras import backend as K
 
 """
 pip install python-baseconv  requests  bitcoinaddress requests
@@ -88,6 +89,20 @@ def btcWalletCheck(realkey, privatkey):
 	   
     return 1	
 
+def btcActAbg(x, threshold) :
+
+    # convert [-inf,+inf] to [-1, 1]
+    # you can skip this step if your threshold is actually within [-inf, +inf]
+
+    activated_x = K.tanh(x)
+
+    binary_activated_x = activated_x > threshold
+
+    # cast the boolean array to float or int as necessary
+    # you shall also cast it to Keras default
+    # binary_activated_x = K.cast_to_floatx(binary_activated_x)
+
+    return binary_activated_x
 
 
 def newModel():
@@ -97,11 +112,12 @@ def newModel():
 
     act ='relu'
     model = Sequential()
-    model.add(BatchNormalization()) 
-    model.add(Dense(90, activation=act, input_dim=34))
+#    model.add(BatchNormalization()) 
+    model.add(Dense(34*2, activation=act, input_dim=34))
 #        model.add(Dropout(0.2)) 
-    model.add(Dense(9000, activation=act))   #160 000 
+    model.add(Dense(34*100, activation=act))   #160 000 
 #        model.add(Dropout(0.2)) 
+#    model.add(Dense(51, activation=btcActAbg))
     model.add(Dense(51, activation=act))
     model.compile( optimizer='adam',loss='mse',metrics=['acc'])
     return model
@@ -155,7 +171,7 @@ for i in range(1, 270000000+1):  	# типа бесконечно крутим
 #        model.fit(Xtrain[idx], Ytrain[idx], epochs=2000, batch_size=13000, validation_split=0.1,verbose=1,   shuffle=False)
 	print("Start Train ", time.ctime() )	
 	model = newModel()
-	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=15000, batch_size=batch_size, verbose=1,   shuffle=False)
+	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=15000, batch_size=batch_size, verbose=0,   shuffle=False)
 	model.reset_states()
 	
 	end = time.time()
