@@ -93,7 +93,8 @@ def btcWalletCheck(realkey, privatkey):
        bbbbbbbb   
 	   
     return 1	
-
+#https://ru.stackoverflow.com/questions/1334955/python-array-create-function
+# autor https://ru.stackoverflow.com/users/330237/guimish
 def custom_activation(x):
     res = []
     xn = x.tolist()
