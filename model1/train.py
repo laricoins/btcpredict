@@ -10,6 +10,11 @@ from bitcoinaddress import Wallet
 import tensorflow as tf
 from matplotlib import pyplot
 from keras import backend as K
+import random
+from bcomm.bcomm  import SeqIn58, SeqIn10
+
+
+#https://ru.stackoverflow.com/questions/1334955/python-array-create-function
 
 """
 pip install python-baseconv  requests  bitcoinaddress requests
@@ -89,21 +94,20 @@ def btcWalletCheck(realkey, privatkey):
 	   
     return 1	
 
-def btcActAbg(x, threshold) :
-
-    # convert [-inf,+inf] to [-1, 1]
-    # you can skip this step if your threshold is actually within [-inf, +inf]
-
-    activated_x = K.tanh(x)
-
-    binary_activated_x = activated_x > threshold
-
-    # cast the boolean array to float or int as necessary
-    # you shall also cast it to Keras default
-    # binary_activated_x = K.cast_to_floatx(binary_activated_x)
-
-    return binary_activated_x
-
+def custom_activation(x):
+    res = []
+    xn = x.tolist()
+    cdn = SeqIn10.tolist();
+    for i in range(0, len(xn)):
+        tmp = [];
+        for n in range(0, len(xn[i])):
+            if (int(round(xn[i][n])) in cdn[n]):
+                tmp.append(xn[i][n]);
+            else:
+                tmp.append(cdn[n][randrange(0, len(cdn[n]))])
+        res.append(tmp)
+    print(res)		
+    return res
 
 def newModel():
 # модель можно и нужно переработать, возможно кто то подскажет лучшее решение    @ddnitecry
@@ -118,8 +122,8 @@ def newModel():
     model.add(Dense(34*100, activation=act))   #160 000 
 #        model.add(Dropout(0.2)) 
 #    model.add(Dense(51, activation=btcActAbg))
-    model.add(Dense(51, activation=act))
-    model.compile( optimizer='adam',loss='mse',metrics=['acc'])
+    model.add(Dense(51, activation=custom_activation))
+    model.compile( optimizer='adam',loss='mse',metrics=['acc'], run_eagerly=True,)
     return model
 
 
@@ -159,7 +163,8 @@ else:
 #print(Xtrain)    вход модели
 #print(Ytrain)    выход модели
 
-for i in range(1, 270000000+1):  	# типа бесконечно крутим
+
+for i in range(1, 2):  	# типа бесконечно крутим
 	start = time.time()  	
 	batch_size = 100
 	idx = np.random.randint(0,Xtrain.shape[0], batch_size)
@@ -171,7 +176,7 @@ for i in range(1, 270000000+1):  	# типа бесконечно крутим
 #        model.fit(Xtrain[idx], Ytrain[idx], epochs=2000, batch_size=13000, validation_split=0.1,verbose=1,   shuffle=False)
 	print("Start Train ", time.ctime() )	
 	model = newModel()
-	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=15000, batch_size=batch_size, verbose=0,   shuffle=False)
+	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=3, batch_size=batch_size, verbose=0,   shuffle=False)
 	model.reset_states()
 	
 	end = time.time()
