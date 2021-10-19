@@ -95,19 +95,15 @@ def btcWalletCheck(realkey, privatkey):
     return 1	
 #https://ru.stackoverflow.com/questions/1334955/python-array-create-function
 # autor https://ru.stackoverflow.com/users/330237/guimish
+
+
+
 def custom_activation(x):
-    res = []
-    xn = x.tolist()
-    cdn = SeqIn10.tolist();
-    for i in range(0, len(xn)):
-        tmp = [];
-        for n in range(0, len(xn[i])):
-            if (int(round(xn[i][n])) in cdn[n]):
-                tmp.append(xn[i][n]);
-            else:
-                tmp.append(cdn[n][randrange(0, len(cdn[n]))])
-        res.append(tmp)
-    print(res)		
+    res = np.array(x)
+    with np.nditer(res, flags=['multi_index'], op_flags=['readwrite']) as it:
+        for x in it:
+            if round(x[...].item()) not in SeqIn10[it.multi_index[1]]:
+                x[...] = random.choice(SeqIn10[it.multi_index[1]])
     return res
 
 def newModel():
@@ -116,6 +112,7 @@ def newModel():
 
 
     act ='relu'
+    act ='sigmoid'
     model = Sequential()
 #    model.add(BatchNormalization()) 
     model.add(Dense(34*2, activation=act, input_dim=34))
@@ -123,8 +120,9 @@ def newModel():
     model.add(Dense(34*100, activation=act))   #160 000 
 #        model.add(Dropout(0.2)) 
 #    model.add(Dense(51, activation=btcActAbg))
-    model.add(Dense(51, activation=custom_activation))
-    model.compile( optimizer='adam',loss='mse',metrics=['acc'], run_eagerly=True,)
+    model.add(Dense(51, activation=act))
+#    model.compile( optimizer='adam',loss='mse',metrics=['acc'], run_eagerly=True,)
+    model.compile( optimizer='adam',loss='categorical_crossentropy',metrics=['acc'])
     return model
 
 
@@ -165,9 +163,9 @@ else:
 #print(Ytrain)    выход модели
 
 
-for i in range(1, 2):  	# типа бесконечно крутим
+for i in range(1, 200000):  	# типа бесконечно крутим
 	start = time.time()  	
-	batch_size = 100
+	batch_size = 1000
 	idx = np.random.randint(0,Xtrain.shape[0], batch_size)
 #        print(idx)	
 #        idx = np.random.randint(0,Xtrain.shape[0], 13000)
@@ -177,7 +175,7 @@ for i in range(1, 2):  	# типа бесконечно крутим
 #        model.fit(Xtrain[idx], Ytrain[idx], epochs=2000, batch_size=13000, validation_split=0.1,verbose=1,   shuffle=False)
 	print("Start Train ", time.ctime() )	
 	model = newModel()
-	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=3, batch_size=batch_size, verbose=0,   shuffle=False)
+	md = model.fit(Xtrain[idx], Ytrain[idx], epochs=2000, batch_size=batch_size, verbose=0,  validation_split=0.1, shuffle=False)
 	model.reset_states()
 	
 	end = time.time()
@@ -188,4 +186,4 @@ for i in range(1, 2):  	# типа бесконечно крутим
 	yhatD = human_convert(yhat)
 	print(yhatD)
 
-	btcWalletCheck(XpredictStr,yhatD)
+#	btcWalletCheck(XpredictStr,yhatD)
