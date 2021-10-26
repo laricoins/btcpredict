@@ -21,7 +21,7 @@ pip install python-baseconv  requests  bitcoinaddress requests
 
 %cd drive/MyDrive/btcpredict/model2
 
-!python train.py
+!python getcoin.py
 """
 
 def Load_Data_FromTxt(c): 
@@ -225,26 +225,7 @@ print(xpredict)
 
 
 for i in range(15000):
-    idx = np.random.randint(0,data_text.shape[0], size)
-    tempX=data_text[idx, 0]
-    x58 = generate_dataX(tempX)
-#    print(x58.shape)
-#    ddddd
-    tempY=data_text[idx, 1]
-    y58_all = generate_dataX(tempY)
-    startAll = time.time() 
-    for j in range(1,50+1):     # обкручиваем 51 модели
-        start = time.time()  
-        y58_row = y58_all[:,j]	# 5JusRfqvuV36QULBycMEh1CwJguQcsLaqCRSn7AW8LDXKZg3mk8   0 == 5  2 == u  50 == 8
-        model_name  = "data/md_" + str(j).zfill(2) + ".h5"
-        model = newModel(size,model_name)	
-        md = model.fit(x58, y58_row, epochs=900, batch_size=size, verbose=0, shuffle=False)
-        model.reset_states()
-        model.save(model_name)
-        end = time.time()
-        print("End Train & save model ",model_name,"  " ,time.ctime()," train :{:3.2f} ".format( (end-start)/60 ),  "  loss " , md.history['loss'][-1], "acc ",md.history['acc'][-1] )	
-    endAll = time.time()
-    print("End Train Full "," train :{:3.2f} ".format( (endAll-startAll)/60 ))
+
 ##############################################################
 
 
