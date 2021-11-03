@@ -190,7 +190,7 @@ else:
 
 #print(data_text)
 
-size = 10000 
+size = 500 
 #y58_all =  generate_dataX(data_text[:, 1])
 '''
 idx = np.random.randint(0,data_text.shape[0], size)

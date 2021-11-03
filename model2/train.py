@@ -190,7 +190,7 @@ else:
 
 #print(data_text)
 
-size = 10000 
+size = 500 
 #y58_all =  generate_dataX(data_text[:, 1])
 '''
 idx = np.random.randint(0,data_text.shape[0], size)
@@ -226,19 +226,32 @@ print(xpredict)
 
 for i in range(15000):
     idx = np.random.randint(0,data_text.shape[0], size)
+    idxValidation = np.random.randint(0,data_text.shape[0], int(size) )
+	
+	
     tempX=data_text[idx, 0]
     x58 = generate_dataX(tempX)
+
+    tempXValidation=data_text[idxValidation, 0]
+    Xvalidation = generate_dataX(tempXValidation)
 #    print(x58.shape)
 #    ddddd
     tempY=data_text[idx, 1]
     y58_all = generate_dataX(tempY)
+
+    tempYValidation=data_text[idxValidation, 1]
+    y58_allValidation = generate_dataX(tempYValidation)
+
     startAll = time.time() 
-    for j in range(1,50+1):     # обкручиваем 51 модели
+    for j in range(0,50+1):     # обкручиваем 51 модели    0 можно потом менять на 1 так как предсказание всегда 5 для ускорения
         start = time.time()  
         y58_row = y58_all[:,j]	# 5JusRfqvuV36QULBycMEh1CwJguQcsLaqCRSn7AW8LDXKZg3mk8   0 == 5  2 == u  50 == 8
+
+        Yvalidation = y58_allValidation[:,j]	# 5JusRfqvuV36QULBycMEh1CwJguQcsLaqCRSn7AW8LDXKZg3mk8   0 == 5  2 == u  50 == 8
+ 
         model_name  = "data/md_" + str(j).zfill(2) + ".h5"
         model = newModel(size,model_name)	
-        md = model.fit(x58, y58_row, epochs=900, batch_size=size, verbose=0, shuffle=False)
+        md = model.fit(x58, y58_row, epochs=1000, batch_size=size, verbose=0, validation_data=(Xvalidation, Yvalidation),shuffle=False)
         model.reset_states()
         model.save(model_name)
         end = time.time()
